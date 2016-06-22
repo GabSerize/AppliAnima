@@ -28,8 +28,8 @@ import javax.swing.event.ChangeListener;
 
 public class Feuille {
 	JFrame f= new JFrame("Fiche Perso");
-	ArrayList<Integer> xplvl, pv, mod, caracprim;
-	ArrayList<JSpinner> caracprimbase,caracprimact,caracmod;
+	ArrayList<Integer> xplvl, pv, mod, caracpricipal;
+	ArrayList<JSpinner> caracpricipalbase,caracpricipalact,caracmod;
 	JComboBox<String> classe,race;
 	JTextField nom,xp,cheveux,yeux,pfrest,actuels;
 	JSpinner niveau,age,taille,tail,poids,app,modpv,ptrept;
@@ -46,7 +46,7 @@ public class Feuille {
 		JPanel general = new JPanel();
 		general.setLayout(new GridLayout(2, 2));	
 		general(general);
-		onglets.addTab("Général", general);	
+		onglets.addTab("General", general);	
 
 		JPanel combat = new JPanel();
 		onglets.addTab("Combat", combat);		 	 
@@ -66,7 +66,7 @@ public class Feuille {
 		JPanel general = new JPanel();
 		general.setLayout(new GridLayout(2, 2));	
 		general(general);
-		onglets.addTab("Général", general);	
+		onglets.addTab("General", general);	
 
 		JPanel combat = new JPanel();
 		onglets.addTab("Combat", combat);		 	 
@@ -152,7 +152,7 @@ public class Feuille {
 
 
 		JPanel pan2= new JPanel(new FlowLayout());
-		pan2.add(new JLabel("âge"));
+		pan2.add(new JLabel("�ge"));
 		age= new JSpinner();
 		age.addChangeListener(new ChangeListener() {					
 			@Override
@@ -177,7 +177,7 @@ public class Feuille {
 		taillemodel.setMinimum(2);
 		taillemodel.setMinimum(30);
 		taille= new JSpinner();
-		taille.setValue(caracprim.get(1)+caracprim.get(3));
+		taille.setValue(caracpricipal.get(1)+caracpricipal.get(3));
 		taille.setPreferredSize(new Dimension(40,20));
 		ti= new JRadioButton();
 		taille.setEnabled(ti.isSelected());
@@ -319,7 +319,7 @@ public class Feuille {
 		pfrest.setText(pf.getText());
 		pfrest.setEditable(false);
 		pan3.add(pf);
-		pan3.add(new JLabel("à Dépenser"));
+		pan3.add(new JLabel("a� Depenser"));
 		pan3.add(pfrest);
 
 		description.add(pan1);
@@ -337,7 +337,7 @@ public class Feuille {
 		pdv.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
 		JPanel pan4=new JPanel(new GridLayout(5, 3));
 		pan4.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, Color.BLACK));
-		JLabel l1=new JLabel("Coût Multiplcateur");
+		JLabel l1=new JLabel("Coa�t Multiplcateur");
 		l1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		pan4.add(l1);
 		JTextField cost=new JTextField();
@@ -348,7 +348,7 @@ public class Feuille {
 		pan4.add(new JLabel("Base"));
 		JTextField basepv=new JTextField();
 		basepv.setEditable(false);
-		basepv.setText(""+pv.get(caracprim.get(1)-1));
+		basepv.setText(""+pv.get(caracpricipal.get(1)-1));
 		pan4.add(basepv);
 		pan4.add(new JLabel("Classe"));
 		JTextField pvniveau=new JTextField();
@@ -371,7 +371,7 @@ public class Feuille {
 		pan4.add(new JLabel("Total"));
 		JTextField pvtotal=new JTextField();
 		pvtotal.setEditable(false);
-		pvtotal.setText(""+(Integer.parseInt(basepv.getText())+Integer.parseInt(pvniveau.getText())+(int)modpv.getValue()*caracprim.get(1)));
+		pvtotal.setText(""+(Integer.parseInt(basepv.getText())+Integer.parseInt(pvniveau.getText())+(int)modpv.getValue()*caracpricipal.get(1)));
 		pan4.add(pvtotal);
 		pdv.add(pan4);
 		JPanel pann=new JPanel(new FlowLayout());
@@ -382,73 +382,73 @@ public class Feuille {
 		actuels=new JTextField();
 		pdv.add(actuels);
 		
-		JPanel résistance= new JPanel();
-		résistance.setLayout(new BoxLayout(résistance, BoxLayout.X_AXIS));
-		résistance.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
-		JPanel résistext= new JPanel(new GridLayout(7, 1));
-		JPanel résisbutton= new JPanel(new GridLayout(7, 1));
-		JLabel labresi=new JLabel("Résistance");
+		JPanel resistance= new JPanel();
+		resistance.setLayout(new BoxLayout(resistance, BoxLayout.X_AXIS));
+		resistance.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+		JPanel resistext= new JPanel(new GridLayout(7, 1));
+		JPanel resisbutton= new JPanel(new GridLayout(7, 1));
+		JLabel labresi=new JLabel("Resistance");
 		labresi.setFont(title);
 		labresi.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-		résistext.add(labresi);
-		résistext.add(new JLabel("Présence"));
-		résistext.add(new JLabel("Physique"));
-		résistext.add(new JLabel("Maladie"));
-		résistext.add(new JLabel("Poisons"));
-		résistext.add(new JLabel("Mystique"));	
-		résistext.add(new JLabel("Psychique"));
-		JPanel résisnbr= new JPanel(new GridLayout(7, 4));
+		resistext.add(labresi);
+		resistext.add(new JLabel("Presence"));
+		resistext.add(new JLabel("Physique"));
+		resistext.add(new JLabel("Maladie"));
+		resistext.add(new JLabel("Poisons"));
+		resistext.add(new JLabel("Mystique"));	
+		resistext.add(new JLabel("Psychique"));
+		JPanel resisnbr= new JPanel(new GridLayout(7, 4));
 		JPanel pannbase=new JPanel(new FlowLayout());
 		JLabel labbase=new JLabel("Base");
 		labbase.setFont(soustitle);
 		pannbase.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		pannbase.add(labbase);
-		résisnbr.add(pannbase);
+		resisnbr.add(pannbase);
 		JPanel panncarac=new JPanel(new FlowLayout());
 		JLabel labcarac=new JLabel("Carac");
 		labcarac.setFont(soustitle);
 		panncarac.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		panncarac.add(labcarac);
-		résisnbr.add(panncarac);
+		resisnbr.add(panncarac);
 		JPanel pannmod=new JPanel(new FlowLayout());
 		JLabel labmod=new JLabel("Mod");
 		labmod.setFont(soustitle);
 		pannmod.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		pannmod.add(labmod);
-		résisnbr.add(pannmod);
+		resisnbr.add(pannmod);
 		JPanel panntotal=new JPanel(new FlowLayout());
 		JLabel labtotal=new JLabel("Total");
 		labtotal.setFont(soustitle);
 		panntotal.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		panntotal.add(labtotal);
-		résisnbr.add(panntotal);
-		JPanel pannspé=new JPanel(new FlowLayout());
-		JLabel labspé=new JLabel("Spé");
-		labspé.setFont(soustitle);
-		pannspé.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-		pannspé.add(labspé);
-		résisbutton.add(pannspé);
+		resisnbr.add(panntotal);
+		JPanel pannspe=new JPanel(new FlowLayout());
+		JLabel labspe=new JLabel("Spe");
+		labspe.setFont(soustitle);
+		pannspe.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+		pannspe.add(labspe);
+		resisbutton.add(pannspe);
 		JTextField pres= new JTextField();
 		pres.setEditable(false);
 		pres.setText(""+(30+5*(int)niveau.getValue()));
 		pres.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(pres);
+		resisnbr.add(pres);
 		JTextField carac1= new JTextField();
 		carac1.setEditable(false);
 		carac1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		carac1.setBackground(Color.BLACK);
 		carac1.setOpaque(true);
-		résisnbr.add(carac1);
+		resisnbr.add(carac1);
 		JTextField mod1= new JTextField();
 		mod1.setEditable(false);
 		mod1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		mod1.setBackground(Color.BLACK);
 		mod1.setOpaque(true);
-		résisnbr.add(mod1);
+		resisnbr.add(mod1);
 		JTextField total1=new JTextField(pres.getText());
 		total1.setEditable(false);
 		total1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(total1);
+		resisnbr.add(total1);
 		JRadioButton avun1=new JRadioButton();
 		avun1.setEnabled(false);
 		avun1.setBackground(Color.GRAY);
@@ -463,23 +463,23 @@ public class Feuille {
 		pann1.add(avdeux1);
 		pann1.add(desavun1);
 		pann1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisbutton.add(pann1);
+		resisbutton.add(pann1);
 		
 		JTextField phy= new JTextField();
 		phy.setEditable(false);
 		phy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		phy.setText(""+total1.getText());
-		résisnbr.add(phy);
+		resisnbr.add(phy);
 		JTextField caracphy= new JTextField();
 		caracphy.setEditable(false);
 		caracphy.setText("CON");
 		caracphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(caracphy);
+		resisnbr.add(caracphy);
 		JTextField modphy= new JTextField();
 		modphy.setEditable(false);
-		modphy.setText(""+mod.get(caracprim.get(1)));
+		modphy.setText(""+mod.get(caracpricipal.get(1)));
 		modphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(modphy);
+		resisnbr.add(modphy);
 		JRadioButton avunphy=new JRadioButton();
 		avunphy.setBackground(Color.GREEN);
 		JRadioButton avdeuxphy=new JRadioButton();
@@ -495,28 +495,28 @@ public class Feuille {
 											(desavunphy.isSelected()? +0/2:+0))))));
 		totalphy.setEditable(false);
 		totalphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(totalphy);
+		resisnbr.add(totalphy);
 		pannphy.add(avunphy);
 		pannphy.add(avdeuxphy);
 		pannphy.add(desavunphy);
 		pannphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisbutton.add(pannphy);
+		resisbutton.add(pannphy);
 		
 		JTextField mal= new JTextField();
 		mal.setEditable(false);
 		mal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		mal.setText(""+total1.getText());
-		résisnbr.add(mal);
+		resisnbr.add(mal);
 		JTextField caracmal= new JTextField();
 		caracmal.setEditable(false);
 		caracmal.setText("CON");
 		caracmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(caracmal);
+		resisnbr.add(caracmal);
 		JTextField modmal= new JTextField();
 		modmal.setEditable(false);
-		modmal.setText(""+mod.get(caracprim.get(1)));
+		modmal.setText(""+mod.get(caracpricipal.get(1)));
 		modmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(modmal);JRadioButton avunmal=new JRadioButton();
+		resisnbr.add(modmal);JRadioButton avunmal=new JRadioButton();
 		avunmal.setBackground(Color.GREEN);
 		JRadioButton avdeuxmal=new JRadioButton();
 		avdeuxmal.setBackground(Color.GREEN);
@@ -531,32 +531,32 @@ public class Feuille {
 											(desavunmal.isSelected()? +0/2:+0))))));
 		totalmal.setEditable(false);
 		totalmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(totalmal);
+		resisnbr.add(totalmal);
 		pannmal.add(avunmal);
 		pannmal.add(avdeuxmal);
 		pannmal.add(desavunmal);
 		pannmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisbutton.add(pannmal);
+		resisbutton.add(pannmal);
 		
 		JTextField poi= new JTextField();
 		poi.setEditable(false);
 		poi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		poi.setText(""+total1.getText());
-		résisnbr.add(poi);
+		resisnbr.add(poi);
 		JTextField caracpoi= new JTextField();
 		caracpoi.setEditable(false);
 		caracpoi.setText("CON");
 		caracpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(caracpoi);
+		resisnbr.add(caracpoi);
 		JTextField modpoi= new JTextField();
 		modpoi.setEditable(false);
-		modpoi.setText(""+mod.get(caracprim.get(1)));
+		modpoi.setText(""+mod.get(caracpricipal.get(1)));
 		modpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(modpoi);
+		resisnbr.add(modpoi);
 		JTextField totalpoi=new JTextField(""+(Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText())));
 		totalpoi.setEditable(false);
 		totalpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(totalpoi);
+		resisnbr.add(totalpoi);
 		
 		JRadioButton avunpoi=new JRadioButton();
 		avunpoi.setBackground(Color.GREEN);
@@ -569,27 +569,27 @@ public class Feuille {
 		pannpoi.add(avdeuxpoi);
 		pannpoi.add(desavunpoi);
 		pannpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisbutton.add(pannpoi);
+		resisbutton.add(pannpoi);
 		
 		JTextField mys= new JTextField();
 		mys.setEditable(false);
 		mys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		mys.setText(""+total1.getText());
-		résisnbr.add(mys);
+		resisnbr.add(mys);
 		JTextField caracmys= new JTextField();
 		caracmys.setEditable(false);
 		caracmys.setText("POU");
 		caracmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(caracmys);
+		resisnbr.add(caracmys);
 		JTextField modmys= new JTextField();
 		modmys.setEditable(false);
-		modmys.setText(""+mod.get(caracprim.get(6)));
+		modmys.setText(""+mod.get(caracpricipal.get(6)));
 		modmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(modmys);
+		resisnbr.add(modmys);
 		JTextField totalmys=new JTextField(""+(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())));
 		totalmys.setEditable(false);
 		totalmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(totalmys);
+		resisnbr.add(totalmys);
 		
 		JRadioButton avunmys=new JRadioButton();
 		avunmys.setBackground(Color.GREEN);
@@ -603,29 +603,29 @@ public class Feuille {
 		pannmys.add(avdeuxmys);
 		pannmys.add(desavunmys);
 		pannmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisbutton.add(pannmys);
+		resisbutton.add(pannmys);
 		
 		JTextField psy= new JTextField();
 		psy.setEditable(false);
 		psy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		psy.setText(""+total1.getText());
-		résisnbr.add(psy);
+		resisnbr.add(psy);
 		JTextField caracpsy= new JTextField();
 		caracpsy.setEditable(false);
 		caracpsy.setText("VOL");
 		caracpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(caracpsy);
+		resisnbr.add(caracpsy);
 		JTextField modpsy= new JTextField();
 		modpsy.setEditable(false);
-		modpsy.setText(""+mod.get(caracprim.get(7)));
+		modpsy.setText(""+mod.get(caracpricipal.get(7)));
 		modpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(modpsy);
+		resisnbr.add(modpsy);
 		JTextField totalpsy=new JTextField(""+
 					(Integer.parseInt(psy.getText())+
 										Integer.parseInt(modpsy.getText())));
 		totalpsy.setEditable(false);
 		totalpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisnbr.add(totalpsy);
+		resisnbr.add(totalpsy);
 		
 		JRadioButton avunpsy=new JRadioButton();
 		avunpsy.setBackground(Color.GREEN);
@@ -638,7 +638,7 @@ public class Feuille {
 		pannpsy.add(avdeuxpsy);
 		pannpsy.add(desavunpsy);
 		pannpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		résisbutton.add(pannpsy);
+		resisbutton.add(pannpsy);
 		
 		avunphy.addActionListener(new ActionListener() {
 			
@@ -821,15 +821,15 @@ public class Feuille {
 		});
 		
 		
-		résistance.add(résistext);
-		résistance.add(résisnbr);
-		résistance.add(résisbutton);	
+		resistance.add(resistext);
+		resistance.add(resisnbr);
+		resistance.add(resisbutton);	
 		
 		JPanel general1=new JPanel();
 		general1.setLayout(new BoxLayout(general1, BoxLayout.X_AXIS));
 		general1.add(description);
 		general1.add(pdv);
-		general1.add(résistance);
+		general1.add(resistance);
 		
 		
 		
@@ -872,13 +872,13 @@ public class Feuille {
 			public void actionPerformed(ActionEvent e) {
 				if(basebutt.isSelected()){
 					for(int i=0; i<7;i++){
-						caracprim.set(i,(int)caracprimbase.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracprimbase.get(i).getValue()-1));
+						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
+						caracmod.get(i).setValue(mod.get((int)caracpricipalbase.get(i).getValue()-1));
 					}
 				}else{
 					for(int i=0; i<7;i++){
-						caracprim.set(i,(int)caracprimact.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracprimact.get(i).getValue()-1));
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
+						caracmod.get(i).setValue(mod.get((int)caracpricipalact.get(i).getValue()-1));
 					}
 				}
 			}
@@ -889,13 +889,13 @@ public class Feuille {
 			public void actionPerformed(ActionEvent e) {
 				if(basebutt.isSelected()){
 					for(int i=0; i<7;i++){
-						caracprim.set(i,(int)caracprimbase.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracprimbase.get(i).getValue()-1));
+						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
+						caracmod.get(i).setValue(mod.get((int)caracpricipalbase.get(i).getValue()-1));
 					}
 				}else{
 					for(int i=0; i<7;i++){
-						caracprim.set(i,(int)caracprimact.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracprimact.get(i).getValue()-1));
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
+						caracmod.get(i).setValue(mod.get((int)caracpricipalact.get(i).getValue()-1));
 					}
 				}
 			}
@@ -940,7 +940,7 @@ public class Feuille {
 		classe.addItem("Guerrier Acrobate");
 		classe.addItem("Paladin");
 		classe.addItem("Paladin Noir");
-		classe.addItem("Maétre d'Arme");
+		classe.addItem("Maitre d'Arme");
 		classe.addItem("Virtuose Martial");
 		classe.addItem("Tao");
 		classe.addItem("Explorateur");
@@ -955,7 +955,7 @@ public class Feuille {
 		classe.addItem("Guerrier Convocateur");
 		classe.addItem("Mentaliste");
 		classe.addItem("Guerrier Mentaliste");
-		classe.addItem("Touche-à-Tout");	
+		classe.addItem("Touche-a-Tout");	
 		
 		
 		race= new JComboBox<String>();
@@ -1099,48 +1099,48 @@ public class Feuille {
 		mod.add(45);
 		
 		caracmod=new ArrayList<JSpinner>();
-		caracprim=new ArrayList<Integer>();
-		caracprimact=new ArrayList<JSpinner>();
-		caracprimbase=new ArrayList<JSpinner>();
+		caracpricipal=new ArrayList<Integer>();
+		caracpricipalact=new ArrayList<JSpinner>();
+		caracpricipalbase=new ArrayList<JSpinner>();
 		for(i=0; i<7;i++){
 
 			caracmod.add(new JSpinner());
 			caracmod.get(i).setValue(0);
-			caracprimbase.add(new JSpinner());
-			caracprimbase.get(i).setValue(5);
-			caracprim.add((int)caracprimbase.get(i).getValue());
-			caracprimbase.get(i).addChangeListener(new ChangeListener() {
+			caracpricipalbase.add(new JSpinner());
+			caracpricipalbase.get(i).setValue(5);
+			caracpricipal.add((int)caracpricipalbase.get(i).getValue());
+			caracpricipalbase.get(i).addChangeListener(new ChangeListener() {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					if ((int)caracprimbase.get(i).getValue()<1){
-						caracprimbase.get(i).setValue(1);
-					}else if((int) caracprimbase.get(i).getValue()>20){
-						caracprimbase.get(i).setValue(20);
+					if ((int)caracpricipalbase.get(i).getValue()<1){
+						caracpricipalbase.get(i).setValue(1);
+					}else if((int) caracpricipalbase.get(i).getValue()>20){
+						caracpricipalbase.get(i).setValue(20);
 					}
 					if(basebutt.isSelected()){
-						caracprim.remove(i);
-						caracprim.add((int)caracprimbase.get(i).getValue());
-						caracprimbase.get(i).setValue(mod.get((int)caracprimbase.get(i).getValue()-1));
+						caracpricipal.remove(i);
+						caracpricipal.add((int)caracpricipalbase.get(i).getValue());
+						caracpricipalbase.get(i).setValue(mod.get((int)caracpricipalbase.get(i).getValue()-1));
 					}
 					
 				}
 			});
-			caracprimact.add(new JSpinner());
-			caracprimact.get(i).setValue(5);
-			caracprim.add((int)caracprimact.get(i).getValue());
-			caracprimact.get(i).addChangeListener(new ChangeListener() {
+			caracpricipalact.add(new JSpinner());
+			caracpricipalact.get(i).setValue(5);
+			caracpricipal.add((int)caracpricipalact.get(i).getValue());
+			caracpricipalact.get(i).addChangeListener(new ChangeListener() {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					if ((int)caracprimact.get(i).getValue()<1){
-						caracprimact.get(i).setValue(1);
-					}else if((int) caracprimact.get(i).getValue()>20){
-						caracprimact.get(i).setValue(20);
+					if ((int)caracpricipalact.get(i).getValue()<1){
+						caracpricipalact.get(i).setValue(1);
+					}else if((int) caracpricipalact.get(i).getValue()>20){
+						caracpricipalact.get(i).setValue(20);
 					}
 					if(actbutt.isSelected()){
-						caracprim.set(i,(int)caracprimact.get(i).getValue());
-						caracprimact.get(i).setValue(mod.get((int)caracprimact.get(i).getValue()-1));
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
+						caracpricipalact.get(i).setValue(mod.get((int)caracpricipalact.get(i).getValue()-1));
 					}
 					
 				}
