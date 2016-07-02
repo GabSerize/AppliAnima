@@ -29,11 +29,12 @@ import javax.swing.event.ChangeListener;
 public class Feuille {
 	JFrame f= new JFrame("Fiche Perso");
 	ArrayList<Integer> xplvl, pv, mod, caracpricipal;
-	ArrayList<JSpinner> caracpricipalbase,caracpricipalact,caracmod;
+	ArrayList<JSpinner> caracpricipalbase,caracpricipalact;
+	ArrayList<JTextField> caracmod;
 	JComboBox<String> classe,race;
 	JTextField nom,xp,cheveux,yeux,pfrest,actuels;
 	JSpinner niveau,age,taille,tail,poids,app,modpv,ptrept;
-	JRadioButton homme, femme, ti;
+	JRadioButton homme, femme, ti, basebutt, actbutt;
 	int[][] tp,costclasse;
 	int lvl,exp,t,i;
 	Font title, soustitle;
@@ -43,15 +44,16 @@ public class Feuille {
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 		init();
 
-		JPanel general = new JPanel();
-		general.setLayout(new GridLayout(2, 2));	
+		JPanel general = new JPanel();	
 		general(general);
 		onglets.addTab("General", general);	
 
 		JPanel combat = new JPanel();
 		onglets.addTab("Combat", combat);		 	 
 		onglets.setOpaque(true);
-
+		
+		//TODO plien écran
+		f.setPreferredSize(new Dimension(1500, 700));
 		f.getContentPane().add(onglets);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
@@ -63,8 +65,7 @@ public class Feuille {
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 		init();
 
-		JPanel general = new JPanel();
-		general.setLayout(new GridLayout(2, 2));	
+		JPanel general = new JPanel();	
 		general(general);
 		onglets.addTab("General", general);	
 
@@ -117,13 +118,17 @@ public class Feuille {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		//TODO plien écran
+		f.setPreferredSize(new Dimension(1500, 700));
 		f.getContentPane().add(onglets);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
 		f.setVisible(true);
 	}	
 
-	public void general(JPanel general){			
+	public void general(JPanel general){
+		general.setLayout(null);
 		JPanel description= new JPanel();
 		title=new Font("Segoe Print",Font.BOLD,20);
 		soustitle=new Font("Segoe Script",Font.BOLD,15);
@@ -252,7 +257,7 @@ public class Feuille {
 		app.setPreferredSize(new Dimension(40, 20));
 		app.setValue(5);
 		app.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if ((int)app.getValue()<0){
@@ -325,8 +330,8 @@ public class Feuille {
 		description.add(pan1);
 		description.add(pan2);
 		description.add(pan3);
-		
-		
+
+
 		JPanel pdv =new JPanel();
 		pdv.setLayout(new BoxLayout(pdv, BoxLayout.Y_AXIS));
 		JPanel pan=new JPanel(new FlowLayout());
@@ -335,9 +340,9 @@ public class Feuille {
 		pan.add(pointdevie);
 		pdv.add(pan);
 		pdv.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
-		JPanel pan4=new JPanel(new GridLayout(5, 3));
-		pan4.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, Color.BLACK));
-		JLabel l1=new JLabel("Coa»t Multiplcateur");
+		JPanel pan4=new JPanel(new GridLayout(6, 2));
+		pan4.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
+		JLabel l1=new JLabel("Cout Multiplcateur");
 		l1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		pan4.add(l1);
 		JTextField cost=new JTextField();
@@ -359,7 +364,7 @@ public class Feuille {
 		modpv=new JSpinner();
 		modpv.setValue(0);
 		modpv.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if((int)modpv.getValue()<0){
@@ -377,11 +382,13 @@ public class Feuille {
 		JPanel pann=new JPanel(new FlowLayout());
 		JLabel l2=new JLabel("Actuels");
 		l2.setFont(soustitle);
-		pann.add(l2);
-		pdv.add(pann);
+		l2.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, Color.BLACK));
+		pan4.add(l2);
 		actuels=new JTextField();
-		pdv.add(actuels);
-		
+		actuels.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, Color.BLACK));
+		pan4.add(actuels);
+		pdv.add(pan4);
+
 		JPanel resistance= new JPanel();
 		resistance.setLayout(new BoxLayout(resistance, BoxLayout.X_AXIS));
 		resistance.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
@@ -428,6 +435,21 @@ public class Feuille {
 		pannspe.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		pannspe.add(labspe);
 		resisbutton.add(pannspe);
+
+		JPanel[] panavdes= new JPanel[6];
+		JRadioButton[][] avdes= new JRadioButton[6][3];
+		for(int i=0; i<avdes.length; i++){
+			panavdes[i]=new JPanel(new FlowLayout());
+			for(int j=0; j<avdes[0].length; j++){
+				avdes[i][j]=new JRadioButton();
+				if(i==0 || (i==5 && j==2)){avdes[i][j].setBackground(Color.GRAY);avdes[i][j].setEnabled(false);}
+				else if(j==2)avdes[i][j].setBackground(Color.RED);
+				else avdes[i][j].setBackground(Color.GREEN);
+				panavdes[i].add(avdes[i][j]);
+			}
+			resisbutton.add(panavdes[i]);
+		}
+
 		JTextField pres= new JTextField();
 		pres.setEditable(false);
 		pres.setText(""+(30+5*(int)niveau.getValue()));
@@ -449,22 +471,7 @@ public class Feuille {
 		total1.setEditable(false);
 		total1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(total1);
-		JRadioButton avun1=new JRadioButton();
-		avun1.setEnabled(false);
-		avun1.setBackground(Color.GRAY);
-		JRadioButton avdeux1=new JRadioButton();
-		avdeux1.setEnabled(false);
-		avdeux1.setBackground(Color.GRAY);
-		JRadioButton desavun1=new JRadioButton();
-		desavun1.setEnabled(false);
-		desavun1.setBackground(Color.GRAY);
-		JPanel pann1=new JPanel(new FlowLayout());
-		pann1.add(avun1);
-		pann1.add(avdeux1);
-		pann1.add(desavun1);
-		pann1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisbutton.add(pann1);
-		
+
 		JTextField phy= new JTextField();
 		phy.setEditable(false);
 		phy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -480,28 +487,11 @@ public class Feuille {
 		modphy.setText(""+mod.get(caracpricipal.get(1)));
 		modphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modphy);
-		JRadioButton avunphy=new JRadioButton();
-		avunphy.setBackground(Color.GREEN);
-		JRadioButton avdeuxphy=new JRadioButton();
-		avdeuxphy.setBackground(Color.GREEN);
-		JRadioButton desavunphy=new JRadioButton();
-		desavunphy.setBackground(Color.RED);
-		JPanel pannphy=new JPanel(new FlowLayout());
-		JTextField totalphy=new JTextField(""+(
-									Integer.parseInt(phy.getText())+
-									Integer.parseInt(modphy.getText()+
-									(avunphy.isSelected()? 25:
-										(avdeuxphy.isSelected()? 50:
-											(desavunphy.isSelected()? +0/2:+0))))));
+		JTextField totalphy=new JTextField(""+(Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText())));
 		totalphy.setEditable(false);
 		totalphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(totalphy);
-		pannphy.add(avunphy);
-		pannphy.add(avdeuxphy);
-		pannphy.add(desavunphy);
-		pannphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisbutton.add(pannphy);
-		
+
 		JTextField mal= new JTextField();
 		mal.setEditable(false);
 		mal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -516,28 +506,12 @@ public class Feuille {
 		modmal.setEditable(false);
 		modmal.setText(""+mod.get(caracpricipal.get(1)));
 		modmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisnbr.add(modmal);JRadioButton avunmal=new JRadioButton();
-		avunmal.setBackground(Color.GREEN);
-		JRadioButton avdeuxmal=new JRadioButton();
-		avdeuxmal.setBackground(Color.GREEN);
-		JRadioButton desavunmal=new JRadioButton();
-		desavunmal.setBackground(Color.RED);
-		JPanel pannmal=new JPanel(new FlowLayout());
-		JTextField totalmal=new JTextField(""+(
-									Integer.parseInt(mal.getText())+
-									Integer.parseInt(modmal.getText()+
-									(avunmal.isSelected()? 25:
-										(avdeuxmal.isSelected()? 50:
-											(desavunmal.isSelected()? +0/2:+0))))));
+		resisnbr.add(modmal);
+		JTextField totalmal=new JTextField(""+(Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText())));
 		totalmal.setEditable(false);
 		totalmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(totalmal);
-		pannmal.add(avunmal);
-		pannmal.add(avdeuxmal);
-		pannmal.add(desavunmal);
-		pannmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisbutton.add(pannmal);
-		
+
 		JTextField poi= new JTextField();
 		poi.setEditable(false);
 		poi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -557,20 +531,7 @@ public class Feuille {
 		totalpoi.setEditable(false);
 		totalpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(totalpoi);
-		
-		JRadioButton avunpoi=new JRadioButton();
-		avunpoi.setBackground(Color.GREEN);
-		JRadioButton avdeuxpoi=new JRadioButton();
-		avdeuxpoi.setBackground(Color.GREEN);
-		JRadioButton desavunpoi=new JRadioButton();
-		desavunpoi.setBackground(Color.RED);
-		JPanel pannpoi=new JPanel(new FlowLayout());
-		pannpoi.add(avunpoi);
-		pannpoi.add(avdeuxpoi);
-		pannpoi.add(desavunpoi);
-		pannpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisbutton.add(pannpoi);
-		
+
 		JTextField mys= new JTextField();
 		mys.setEditable(false);
 		mys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -590,21 +551,7 @@ public class Feuille {
 		totalmys.setEditable(false);
 		totalmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(totalmys);
-		
-		JRadioButton avunmys=new JRadioButton();
-		avunmys.setBackground(Color.GREEN);
-		JRadioButton avdeuxmys=new JRadioButton();
-		avdeuxmys.setBackground(Color.GREEN);
-		JRadioButton desavunmys=new JRadioButton();
-		desavunmys.setBackground(Color.GRAY);
-		desavunmys.setEnabled(false);
-		JPanel pannmys=new JPanel(new FlowLayout());
-		pannmys.add(avunmys);
-		pannmys.add(avdeuxmys);
-		pannmys.add(desavunmys);
-		pannmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisbutton.add(pannmys);
-		
+
 		JTextField psy= new JTextField();
 		psy.setEditable(false);
 		psy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -621,242 +568,485 @@ public class Feuille {
 		modpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modpsy);
 		JTextField totalpsy=new JTextField(""+
-					(Integer.parseInt(psy.getText())+
-										Integer.parseInt(modpsy.getText())));
+				(Integer.parseInt(psy.getText())+
+						Integer.parseInt(modpsy.getText())));
 		totalpsy.setEditable(false);
 		totalpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(totalpsy);
-		
-		JRadioButton avunpsy=new JRadioButton();
-		avunpsy.setBackground(Color.GREEN);
-		JRadioButton avdeuxpsy=new JRadioButton();
-		avdeuxpsy.setBackground(Color.GREEN);
-		JRadioButton desavunpsy=new JRadioButton();
-		desavunpsy.setBackground(Color.RED);
-		JPanel pannpsy=new JPanel(new FlowLayout());
-		pannpsy.add(avunpsy);
-		pannpsy.add(avdeuxpsy);
-		pannpsy.add(desavunpsy);
-		pannpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		resisbutton.add(pannpsy);
-		
-		avunphy.addActionListener(new ActionListener() {
-			
-			@Override
+
+		//avantage un physique
+		avdes[1][0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(avdeuxphy.isSelected()){
-					avdeuxphy.setSelected(false);
-				}else if(desavunphy.isSelected()){
-					desavunphy.setSelected(false);
-				}
-				if(avunmal.isSelected()|| avunpoi.isSelected()){
-					avunphy.setSelected(true);
-				}
-			}
-		});
-		avdeuxphy.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avunphy.isSelected()){
-					avunphy.setSelected(false);
-				}else if(desavunphy.isSelected()){
-					desavunphy.setSelected(false);
-				}
-				if(avdeuxmal.isSelected()|| avdeuxpoi.isSelected()){
-					avdeuxphy.setSelected(true);
-				}
-			}
-		});
-		desavunphy.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxphy.isSelected()){
-					avdeuxphy.setSelected(false);
-				}else if(avunphy.isSelected()){
-					desavunphy.setSelected(false);
-				}
-				if(avunmal.isSelected()|| avunpoi.isSelected()){
-					avunphy.setSelected(true);
-				}
-			}
-		});
-		
-		avunmal.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxmal.isSelected()){
-					avdeuxmal.setSelected(false);
-				}else if(desavunmal.isSelected()){
-					desavunmal.setSelected(false);
-				}
-				if(avunphy.isSelected()|| avunpoi.isSelected()){
-					avunmal.setSelected(true);
-				}
-			}
-		});
-		avdeuxmal.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avunmal.isSelected()){
-					avunmal.setSelected(false);
-				}else if(desavunmal.isSelected()){
-					desavunmal.setSelected(false);
-				}
-				if(avdeuxphy.isSelected()|| avdeuxpoi.isSelected()){
-					avdeuxmal.setSelected(true);
-				}
-			}
-		});
-		desavunmal.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxmal.isSelected()){
-					avdeuxmal.setSelected(false);
-				}else if(avunmal.isSelected()){
-					desavunmal.setSelected(false);
-				}
-			}
-		});
-		
-		avunpoi.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxpoi.isSelected()){
-					avdeuxpoi.setSelected(false);
-				}else if(desavunpoi.isSelected()){
-					desavunpoi.setSelected(false);
-				}
-				if(avunphy.isSelected()|| avunmal.isSelected()){
-					avunpoi.setSelected(true);
-				}
-			}
-		});
-		avdeuxpoi.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avunpoi.isSelected()){
-					avunpoi.setSelected(false);
-				}else if(desavunpoi.isSelected()){
-					desavunpoi.setSelected(false);
-				}
-				if(avdeuxphy.isSelected()|| avdeuxmal.isSelected()){
-					avdeuxpoi.setSelected(true);
-				}
-			}
-		});
-		desavunpoi.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxpoi.isSelected()){
-					avdeuxpoi.setSelected(false);
-				}else if(avunpoi.isSelected()){
-					desavunpoi.setSelected(false);
-				}
-			}
-		});
-		
-		avunmys.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxmys.isSelected()){
-					avdeuxmys.setSelected(false);
-				}else if(desavunmys.isSelected()){
-					desavunmys.setSelected(false);
-				}
-			}
-		});
-		avdeuxmys.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avunmys.isSelected()){
-					avunmys.setSelected(false);
-				}else if(desavunmys.isSelected()){
-					desavunmys.setSelected(false);
-				}
-			}
-		});
-		desavunmys.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(avdeuxmys.isSelected()){
-					avdeuxmys.setSelected(false);
-				}else if(avunmys.isSelected()){
-					desavunmys.setSelected(false);
+				if(avdes[1][0].isSelected()){
+					if(avdes[1][1].isSelected()){
+						avdes[1][1].setSelected(false);
+						avdes[2][1].setSelected(false);
+						avdes[3][1].setSelected(false);
+						totalphy.setText(Integer.parseInt(totalphy.getText())-50+"");
+						totalmal.setText(Integer.parseInt(totalmal.getText())-50+"");
+						totalpoi.setText(Integer.parseInt(totalpoi.getText())-50+"");
+					}
+					avdes[2][0].setSelected(true);
+					avdes[3][0].setSelected(true);
+					if(avdes[1][2].isSelected())
+						totalphy.setText(((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+25)/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+25+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText(((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+25)/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+25+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText(((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+25)/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+25+"");
+				}else{
+					if(avdes[1][2].isSelected())
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+"");
 				}
 			}
 		});
 
-		avunpsy.addActionListener(new ActionListener() {
-			
-			@Override
+		//avantage un maladie
+		avdes[2][0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(avdeuxpsy.isSelected()){
-					avdeuxpsy.setSelected(false);
-				}else if(desavunpsy.isSelected()){
-					desavunpsy.setSelected(false);
+				if(avdes[2][0].isSelected()){
+					if(avdes[2][1].isSelected()){
+						avdes[1][1].setSelected(false);
+						avdes[2][1].setSelected(false);
+						avdes[3][1].setSelected(false);
+						totalphy.setText(Integer.parseInt(totalphy.getText())-50+"");
+						totalmal.setText(Integer.parseInt(totalmal.getText())-50+"");
+						totalpoi.setText(Integer.parseInt(totalpoi.getText())-50+"");
+					}
+					avdes[1][0].setSelected(true);
+					avdes[3][0].setSelected(true);
+					if(avdes[1][2].isSelected())
+						totalphy.setText(((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+25)/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+25+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText(((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+25)/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+25+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText(((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+25)/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+25+"");
+				}else{
+					avdes[1][0].setSelected(false);
+					avdes[3][0].setSelected(false);
+					if(avdes[1][2].isSelected())
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+"");
 				}
 			}
 		});
-		avdeuxpsy.addActionListener(new ActionListener() {
-			
-			@Override
+
+		//avantage un poisson
+		avdes[3][0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(avunpsy.isSelected()){
-					avunpsy.setSelected(false);
-				}else if(desavunpsy.isSelected()){
-					desavunpsy.setSelected(false);
+				if(avdes[3][0].isSelected()){
+					if(avdes[3][1].isSelected()){
+						avdes[1][1].setSelected(false);
+						avdes[2][1].setSelected(false);
+						avdes[3][1].setSelected(false);
+						totalphy.setText(Integer.parseInt(totalphy.getText())-50+"");
+						totalmal.setText(Integer.parseInt(totalmal.getText())-50+"");
+						totalpoi.setText(Integer.parseInt(totalpoi.getText())-50+"");
+					}
+					avdes[1][0].setSelected(true);
+					avdes[2][0].setSelected(true);
+					if(avdes[1][2].isSelected())
+						totalphy.setText(((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+25)/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+25+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText(((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+25)/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+25+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText(((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+25)/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+25+"");
+				}else{
+					avdes[1][0].setSelected(false);
+					avdes[2][0].setSelected(false);
+					if(avdes[1][2].isSelected())
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+"");
 				}
 			}
 		});
-		
-		
+
+		//avantage un mystique
+		avdes[4][0].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[4][0].isSelected()){
+					if(avdes[4][1].isSelected()){
+						avdes[4][1].setSelected(false);
+					}
+					if(avdes[4][2].isSelected()){
+						avdes[4][2].setSelected(false);
+					}
+					totalmys.setText((Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText()))+25+"");
+				}else{
+					if(avdes[4][2].isSelected())
+						totalmys.setText(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())/2+"");
+					else
+						totalmys.setText(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())+"");
+				}
+			}
+		});
+
+		//avantage un psychique
+		avdes[5][0].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[5][0].isSelected()){
+					if(avdes[5][1].isSelected()){
+						avdes[5][1].setSelected(false);
+						totalmys.setText(Integer.parseInt(totalpsy.getText())-50+"");
+					}
+					totalmys.setText(Integer.parseInt(totalpsy.getText())+25+"");
+				}else{
+					totalmys.setText(Integer.parseInt(totalpsy.getText())-25+"");
+				}
+			}
+		});
+
+
+
+		//avantage deux physique
+		avdes[1][1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[1][1].isSelected()){
+					if(avdes[1][0].isSelected()){
+						avdes[1][0].setSelected(false);
+						avdes[2][0].setSelected(false);
+						avdes[3][0].setSelected(false);
+						totalphy.setText(Integer.parseInt(totalphy.getText())-25+"");
+						totalmal.setText(Integer.parseInt(totalmal.getText())-25+"");
+						totalpoi.setText(Integer.parseInt(totalpoi.getText())-25+"");
+					}
+					avdes[2][1].setSelected(true);
+					avdes[3][1].setSelected(true);
+					if(avdes[1][2].isSelected())
+						totalphy.setText(((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+50)/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+50+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText(((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+50)/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+50+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText(((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+50)/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+50+"");
+				}else{
+					avdes[2][1].setSelected(false);
+					avdes[3][1].setSelected(false);
+					if(avdes[1][2].isSelected())
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+"");
+				}
+			}
+		});
+
+		//avantage deux maladie
+		avdes[2][1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[2][1].isSelected()){
+					if(avdes[2][0].isSelected()){
+						avdes[1][0].setSelected(false);
+						avdes[2][0].setSelected(false);
+						avdes[3][0].setSelected(false);
+						totalphy.setText(Integer.parseInt(totalphy.getText())-25+"");
+						totalmal.setText(Integer.parseInt(totalmal.getText())-25+"");
+						totalpoi.setText(Integer.parseInt(totalpoi.getText())-25+"");
+					}
+					avdes[1][1].setSelected(true);
+					avdes[3][1].setSelected(true);
+					if(avdes[1][2].isSelected())
+						totalphy.setText(((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+50)/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+50+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText(((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+50)/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+50+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText(((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+50)/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+50+"");
+				}else{
+					avdes[1][1].setSelected(false);
+					avdes[3][1].setSelected(false);
+					if(avdes[1][2].isSelected())
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+"");
+				}
+			}
+		});
+
+		//avantage deux poisson
+		avdes[3][1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[3][1].isSelected()){
+					if(avdes[3][0].isSelected()){
+						avdes[1][0].setSelected(false);
+						avdes[2][0].setSelected(false);
+						avdes[3][0].setSelected(false);
+						totalphy.setText(Integer.parseInt(totalphy.getText())-25+"");
+						totalmal.setText(Integer.parseInt(totalmal.getText())-25+"");
+						totalpoi.setText(Integer.parseInt(totalpoi.getText())-25+"");
+					}
+					avdes[1][1].setSelected(true);
+					avdes[2][1].setSelected(true);
+					if(avdes[1][2].isSelected())
+						totalphy.setText(((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+50)/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+50+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText(((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+50)/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+50+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText(((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+50)/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+50+"");
+				}else{
+					avdes[1][1].setSelected(false);
+					avdes[2][1].setSelected(false);
+					if(avdes[1][2].isSelected())
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))/2+"");
+					else
+						totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText()))+"");
+					if(avdes[2][2].isSelected())
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))/2+"");
+					else
+						totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText()))+"");
+					if(avdes[3][2].isSelected())
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))/2+"");
+					else
+						totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText()))+"");
+				}
+			}
+		});
+
+		//avantage deux mystique
+		avdes[4][1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[4][1].isSelected()){
+					if(avdes[4][0].isSelected()){
+						avdes[4][0].setSelected(false);
+						totalmys.setText(Integer.parseInt(totalmys.getText())-25+"");
+					}
+					if(avdes[4][2].isSelected()){
+						avdes[4][2].setSelected(false);
+						totalmys.setText(Integer.parseInt(totalmys.getText())/2+"");
+					}
+					totalmys.setText(Integer.parseInt(totalmys.getText())+50+"");
+				}else{
+					if(avdes[4][2].isSelected())
+						totalmys.setText(Integer.parseInt(totalmys.getText())-25+"");
+					else
+						totalmys.setText(Integer.parseInt(totalmys.getText())-50+"");
+					
+				}
+			}
+		});
+
+		//avantage deux psychique
+		avdes[5][1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[5][1].isSelected()){
+					if(avdes[5][0].isSelected()){
+						avdes[5][0].setSelected(false);
+						totalmys.setText(Integer.parseInt(totalpsy.getText())-25+"");
+					}
+					totalmys.setText(Integer.parseInt(totalpsy.getText())+50+"");
+				}else{
+					totalmys.setText(Integer.parseInt(totalpsy.getText())-50+"");
+				}
+			}
+		});
+
+
+
+		//desavantage physique
+		avdes[1][2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[1][2].isSelected()){
+					System.out.println(totalphy.getText());
+					totalphy.setText(Integer.parseInt(totalphy.getText())/2+"");
+				}else{
+					if(avdes[1][0].isSelected()){
+						totalphy.setText(Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText())+25+"");
+					}else if(avdes[1][1].isSelected()){
+						totalphy.setText(Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText())+50+"");
+					}else{
+						totalphy.setText(Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText())+"");
+					}
+				}
+			}
+		});
+
+		//desavantage maladie
+		avdes[2][2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[2][2].isSelected()){
+					totalmal.setText(Integer.parseInt(totalmal.getText())/2+"");
+				}else{
+					if(avdes[2][0].isSelected()){
+						totalmal.setText(Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText())+25+"");
+					}else if(avdes[2][1].isSelected()){
+						totalmal.setText(Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText())+50+"");
+					}else{
+						totalmal.setText(Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText())+"");
+					}
+				}
+			}
+		});
+
+		//desavantage poisson
+		avdes[3][2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[3][2].isSelected()){
+					totalpoi.setText(Integer.parseInt(totalpoi.getText())/2+"");
+				}else{
+					if(avdes[3][0].isSelected()){
+						totalpoi.setText(Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText())+25+"");
+					}else if(avdes[3][1].isSelected()){
+						totalpoi.setText(Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText())+50+"");
+					}else{
+						totalpoi.setText(Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText())+"");
+					}
+				}
+			}
+		});
+
+		//desavantage poisson
+		avdes[4][2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(avdes[4][2].isSelected()){
+					totalmys.setText(Integer.parseInt(totalmys.getText())/2+"");
+				}else{
+					if(avdes[4][0].isSelected()){
+						totalmys.setText(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())+25+"");
+					}else if(avdes[4][1].isSelected()){
+						totalmys.setText(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())+50+"");
+					}else{
+						totalmys.setText(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())+"");
+					}
+				}
+			}
+		});
+
+
 		resistance.add(resistext);
 		resistance.add(resisnbr);
 		resistance.add(resisbutton);	
-		
-		JPanel general1=new JPanel();
-		general1.setLayout(new BoxLayout(general1, BoxLayout.X_AXIS));
-		general1.add(description);
-		general1.add(pdv);
-		general1.add(resistance);
-		
-		
-		
-		JPanel general2= new JPanel();
-		general2.setLayout(new BoxLayout(general2, BoxLayout.Y_AXIS));
-		
+
+
 		JPanel carac=new JPanel(new GridLayout(9, 4));
-		carac.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+		carac.setBorder(BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
 		ptrept=new JSpinner();
 		ptrept.setValue((int)niveau.getValue()/2);
 		carac.add(ptrept);
 		ButtonGroup caracgroupbutt=new ButtonGroup();
 		JPanel basepan=new JPanel(new FlowLayout());		
 		basepan.add(new JLabel("Base"));
-		JRadioButton basebutt=new JRadioButton();
 		basebutt.setSelected(true);
 		caracgroupbutt.add(basebutt);
 		basepan.add(basebutt);
 		carac.add(basepan);
 		JPanel actpan=new JPanel(new FlowLayout());		
 		actpan.add(new JLabel("Act"));
-		JRadioButton actbutt=new JRadioButton();
 		caracgroupbutt.add(actbutt);
 		actpan.add(actbutt);
 		carac.add(actpan);
-		carac.add(new JLabel("Mod"));	
-		for(i=0; i<7;i++){
+		carac.add(new JLabel("Mod"));
+		basebutt.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(basebutt.isSelected()){
+					for(int i=0; i<7;i++){
+						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalbase.get(i).getValue()-1));
+					}
+				}else{
+					for(int i=0; i<7;i++){
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalact.get(i).getValue()-1));
+					}
+				}
+			}
+		});
+		actbutt.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(basebutt.isSelected()){
+					for(int i=0; i<7;i++){
+						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalbase.get(i).getValue()-1));
+					}
+				}else{
+					for(int i=0; i<7;i++){
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalact.get(i).getValue()-1));
+					}
+				}
+			}
+		});
+		for(int i=0; i<7;i++){
 			if(i==0)carac.add(new JLabel("Agi"));
 			if(i==1)carac.add(new JLabel("Con"));
 			if(i==2)carac.add(new JLabel("Dex"));
@@ -865,55 +1055,21 @@ public class Feuille {
 			if(i==5)carac.add(new JLabel("Per"));
 			if(i==6)carac.add(new JLabel("Pou"));
 			if(i==7)carac.add(new JLabel("Vol"));
+			caracmod.get(i).setEditable(false);
+			carac.add(caracpricipalbase.get(i));
+			carac.add(caracpricipalact.get(i));
+			caracmod.get(i).setBorder(BorderFactory.createMatteBorder( 0, 1, 1, 1, Color.BLACK));
+			carac.add(caracmod.get(i));
 		}
-		basebutt.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(basebutt.isSelected()){
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracpricipalbase.get(i).getValue()-1));
-					}
-				}else{
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracpricipalact.get(i).getValue()-1));
-					}
-				}
-			}
-		});
-		actbutt.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(basebutt.isSelected()){
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracpricipalbase.get(i).getValue()-1));
-					}
-				}else{
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
-						caracmod.get(i).setValue(mod.get((int)caracpricipalact.get(i).getValue()-1));
-					}
-				}
-			}
-		});
-		for(int i=0; i<7;i++){
-			caracmod.get(i).setEnabled(false);
-		}
-		
-		general2.add(carac);
-		
-		
-		
-		
-		
-		
-		
-		general.add(general1);
-		general.add(general2);
+		caracmod.get(0).setBorder(BorderFactory.createMatteBorder( 1, 1, 1, 1, Color.BLACK));
+
+		general.add(description);
+		description.setBounds(0, 0, 720, 150);
+		general.add(pdv);
+		pdv.setBounds(720-3, 0, 170, 227);
+		general.add(resistance);
+		resistance.setBounds(720-3+170-3, 0, 425, 200);
+		general.add(carac);	
 	}
 
 	public void init(){
@@ -933,8 +1089,8 @@ public class Feuille {
 		xplvl.add(2850);
 		xplvl.add(3250);
 		xplvl.add(3675);
-		
-		
+
+
 		classe= new JComboBox<String>();
 		classe.addItem("Guerrier");
 		classe.addItem("Guerrier Acrobate");
@@ -956,8 +1112,8 @@ public class Feuille {
 		classe.addItem("Mentaliste");
 		classe.addItem("Guerrier Mentaliste");
 		classe.addItem("Touche-a-Tout");	
-		
-		
+
+
 		race= new JComboBox<String>();
 		race.addItem("Humain");
 		race.addItem("Sylvain");
@@ -970,8 +1126,8 @@ public class Feuille {
 		race.addItem("Vetala");
 		race.addItem("Tuan Dalyr");
 		race.addItem("Turak");	
-		
-		
+
+
 		tp=new int[20][4];
 		tp[0][0]=20;
 		tp[0][1]=60;
@@ -1053,7 +1209,7 @@ public class Feuille {
 		tp[19][1]=260;
 		tp[19][2]=120;
 		tp[19][3]=450;
-		
+
 		pv=new ArrayList<Integer>();
 		pv.add(5);
 		pv.add(20);
@@ -1075,7 +1231,7 @@ public class Feuille {
 		pv.add(240);
 		pv.add(250);
 		pv.add(265);
-		
+
 		mod=new ArrayList<Integer>();
 		mod.add(-30);
 		mod.add(-20);
@@ -1097,56 +1253,26 @@ public class Feuille {
 		mod.add(40);
 		mod.add(40);
 		mod.add(45);
-		
-		caracmod=new ArrayList<JSpinner>();
+
+		caracmod=new ArrayList<JTextField>();
 		caracpricipal=new ArrayList<Integer>();
 		caracpricipalact=new ArrayList<JSpinner>();
 		caracpricipalbase=new ArrayList<JSpinner>();
+		basebutt=new JRadioButton();
+		actbutt=new JRadioButton();
 		for(i=0; i<7;i++){
 
-			caracmod.add(new JSpinner());
-			caracmod.get(i).setValue(0);
+			caracmod.add(new JTextField("0"));
 			caracpricipalbase.add(new JSpinner());
 			caracpricipalbase.get(i).setValue(5);
 			caracpricipal.add((int)caracpricipalbase.get(i).getValue());
-			caracpricipalbase.get(i).addChangeListener(new ChangeListener() {
-				
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if ((int)caracpricipalbase.get(i).getValue()<1){
-						caracpricipalbase.get(i).setValue(1);
-					}else if((int) caracpricipalbase.get(i).getValue()>20){
-						caracpricipalbase.get(i).setValue(20);
-					}
-					if(basebutt.isSelected()){
-						caracpricipal.remove(i);
-						caracpricipal.add((int)caracpricipalbase.get(i).getValue());
-						caracpricipalbase.get(i).setValue(mod.get((int)caracpricipalbase.get(i).getValue()-1));
-					}
-					
-				}
-			});
+			caracpricipalbase.get(i).addChangeListener(new MyChangeListener(caracpricipalbase.get(i), basebutt, caracpricipal, mod, i,caracmod.get(i)));
 			caracpricipalact.add(new JSpinner());
 			caracpricipalact.get(i).setValue(5);
 			caracpricipal.add((int)caracpricipalact.get(i).getValue());
-			caracpricipalact.get(i).addChangeListener(new ChangeListener() {
-				
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if ((int)caracpricipalact.get(i).getValue()<1){
-						caracpricipalact.get(i).setValue(1);
-					}else if((int) caracpricipalact.get(i).getValue()>20){
-						caracpricipalact.get(i).setValue(20);
-					}
-					if(actbutt.isSelected()){
-						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
-						caracpricipalact.get(i).setValue(mod.get((int)caracpricipalact.get(i).getValue()-1));
-					}
-					
-				}
-			});
+			caracpricipalact.get(i).addChangeListener(new MyChangeListener(caracpricipalact.get(i), actbutt, caracpricipal, mod, i,caracmod.get(i)));
 		}	
-		
+
 		BufferedReader costclass;
 		try {
 			costclass = new BufferedReader(new FileReader("src/costclass"));
@@ -1164,7 +1290,39 @@ public class Feuille {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
+}
+
+class MyChangeListener implements ChangeListener{
+
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> caracpricipal,mod;
+	int i;
+	JTextField caracmod;
+
+	public MyChangeListener(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod,int i, JTextField caracmod) {
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.i=i;
+		this.caracmod=caracmod;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			caracpricipal.set(i,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+		}
+
+	}
 }
