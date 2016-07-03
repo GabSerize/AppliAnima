@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -44,7 +45,7 @@ public class Feuille {
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 		init();
 
-		JPanel general = new JPanel();	
+		JScrollPane general = new JScrollPane();	
 		general(general);
 		onglets.addTab("General", general);	
 
@@ -52,11 +53,12 @@ public class Feuille {
 		onglets.addTab("Combat", combat);		 	 
 		onglets.setOpaque(true);
 		
-		//TODO plien écran
 		f.setPreferredSize(new Dimension(1500, 700));
 		f.getContentPane().add(onglets);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
+		f.setDefaultLookAndFeelDecorated(true);
+		f.setExtendedState(f.MAXIMIZED_BOTH);
 		f.setVisible(true);
 	}
 
@@ -65,7 +67,7 @@ public class Feuille {
 		JTabbedPane onglets = new JTabbedPane(SwingConstants.TOP);
 		init();
 
-		JPanel general = new JPanel();	
+		JScrollPane general = new JScrollPane();
 		general(general);
 		onglets.addTab("General", general);	
 
@@ -119,15 +121,16 @@ public class Feuille {
 			e.printStackTrace();
 		}
 		
-		//TODO plien écran
 		f.setPreferredSize(new Dimension(1500, 700));
 		f.getContentPane().add(onglets);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
+		f.setDefaultLookAndFeelDecorated(true);
+		f.setExtendedState(f.MAXIMIZED_BOTH);
 		f.setVisible(true);
 	}	
 
-	public void general(JPanel general){
+	public void general(JScrollPane general){
 		general.setLayout(null);
 		JPanel description= new JPanel();
 		title=new Font("Segoe Print",Font.BOLD,20);
@@ -379,7 +382,6 @@ public class Feuille {
 		pvtotal.setText(""+(Integer.parseInt(basepv.getText())+Integer.parseInt(pvniveau.getText())+(int)modpv.getValue()*caracpricipal.get(1)));
 		pan4.add(pvtotal);
 		pdv.add(pan4);
-		JPanel pann=new JPanel(new FlowLayout());
 		JLabel l2=new JLabel("Actuels");
 		l2.setFont(soustitle);
 		l2.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, Color.BLACK));
@@ -994,8 +996,8 @@ public class Feuille {
 		resistance.add(resisbutton);	
 
 
-		JPanel carac=new JPanel(new GridLayout(9, 4));
-		carac.setBorder(BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
+		JPanel carac=new JPanel(new GridLayout(8, 4));
+		carac.setBorder(BorderFactory.createMatteBorder(2, 3, 3, 3, Color.BLACK));
 		ptrept=new JSpinner();
 		ptrept.setValue((int)niveau.getValue()/2);
 		carac.add(ptrept);
@@ -1058,10 +1060,10 @@ public class Feuille {
 			caracmod.get(i).setEditable(false);
 			carac.add(caracpricipalbase.get(i));
 			carac.add(caracpricipalact.get(i));
-			caracmod.get(i).setBorder(BorderFactory.createMatteBorder( 0, 1, 1, 1, Color.BLACK));
+			caracmod.get(i).setBorder(BorderFactory.createMatteBorder( 0, 1, 1, 0, Color.BLACK));
 			carac.add(caracmod.get(i));
 		}
-		caracmod.get(0).setBorder(BorderFactory.createMatteBorder( 1, 1, 1, 1, Color.BLACK));
+		caracmod.get(0).setBorder(BorderFactory.createMatteBorder( 1, 1, 1, 0, Color.BLACK));
 
 		general.add(description);
 		description.setBounds(0, 0, 720, 150);
@@ -1069,7 +1071,15 @@ public class Feuille {
 		pdv.setBounds(720-3, 0, 170, 227);
 		general.add(resistance);
 		resistance.setBounds(720-3+170-3, 0, 425, 200);
+		JPanel panl3=new JPanel(new FlowLayout());
+		JLabel l3=new JLabel("Caracteristique");
+		l3.setFont(title);
+		panl3.setBorder(BorderFactory.createMatteBorder(3, 3, 0, 3, Color.BLACK));
+		panl3.add(l3);
+		general.add(panl3);
+		panl3.setBounds(0, 150-3, 250, 50);
 		general.add(carac);	
+		carac.setBounds(0, 150-3+50, 250, 180);
 	}
 
 	public void init(){
