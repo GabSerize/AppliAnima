@@ -29,7 +29,7 @@ import javax.swing.event.ChangeListener;
 
 public class Feuille {
 	JFrame f= new JFrame("Fiche Perso");
-	ArrayList<Integer> xplvl, pv, mod, caracpricipal;
+	ArrayList<Integer> xplvl, pv, mod,caracpricipal;
 	ArrayList<JSpinner> caracpricipalbase,caracpricipalact;
 	ArrayList<JTextField> caracmod;
 	JComboBox<String> classe,race;
@@ -39,6 +39,7 @@ public class Feuille {
 	int[][] tp,costclasse;
 	int lvl,exp,t,i;
 	Font title, soustitle;
+	boolean taillefemme,tailledaimah;
 
 	public Feuille(){
 		f.setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -52,7 +53,7 @@ public class Feuille {
 		JPanel combat = new JPanel();
 		onglets.addTab("Combat", combat);		 	 
 		onglets.setOpaque(true);
-		
+
 		f.setPreferredSize(new Dimension(1500, 700));
 		f.getContentPane().add(onglets);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,7 +121,7 @@ public class Feuille {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		f.setPreferredSize(new Dimension(1500, 700));
 		f.getContentPane().add(onglets);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,8 +152,8 @@ public class Feuille {
 		pan1.add(race);
 		pan1.add(new JLabel("Sexe"));
 		ButtonGroup sexe =new ButtonGroup(); 				
-		homme = new JRadioButton("Homme");
-		femme = new JRadioButton("Femme");
+		homme = new JRadioButton("♂");
+		femme = new JRadioButton("♀");
 		sexe.add(homme);
 		sexe.add(femme);
 		pan1.add(homme);
@@ -160,7 +161,7 @@ public class Feuille {
 
 
 		JPanel pan2= new JPanel(new FlowLayout());
-		pan2.add(new JLabel("�ge"));
+		pan2.add(new JLabel("Âge"));
 		age= new JSpinner();
 		age.addChangeListener(new ChangeListener() {					
 			@Override
@@ -181,23 +182,25 @@ public class Feuille {
 		yeux.setPreferredSize(new Dimension(80, 20));
 		pan2.add(yeux);
 		pan2.add(new JLabel("Taille"));
-		SpinnerNumberModel taillemodel= new SpinnerNumberModel();
-		taillemodel.setMinimum(2);
-		taillemodel.setMinimum(30);
 		taille= new JSpinner();
 		taille.setValue(caracpricipal.get(1)+caracpricipal.get(3));
 		taille.setPreferredSize(new Dimension(40,20));
 		ti= new JRadioButton();
+		ti.setBackground(Color.GREEN);
+		JSpinner tispinn=new JSpinner();
+		tispinn.setEnabled(false);
 		taille.setEnabled(ti.isSelected());
 		ti.addActionListener(new ActionListener() {					
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				taille.setEnabled(ti.isSelected());
-				taillemodel.setMinimum(t-5<2? 2:t-5);
-				taillemodel.setMaximum(t+5);
+				if(!ti.isSelected())
+					tispinn.setValue(0);
+				tispinn.setEnabled(ti.isSelected());
 			}
 		});
-		t=(int)taille.getValue();
+		t=(int)taille.getValue()+(int)tispinn.getValue();
+		if(femme.isSelected())t--;
+		if(race.getSelectedIndex()==4)t--;
 		SpinnerNumberModel tailmodel= new SpinnerNumberModel((tp[t-2][0]+tp[t-2][1])/2, tp[t-2][0], tp[t-2][1] , 1);
 		tail=new JSpinner();
 		tail.setValue(tailmodel.getValue());
@@ -229,14 +232,16 @@ public class Feuille {
 		taille.addChangeListener(new ChangeListener() {					
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if((int)taille.getValue()<(int)taillemodel.getMinimum() ||  (int)taille.getValue()>(int)taillemodel.getMaximum()){
-					taille.setValue(t);
-				}
-				t=(int)taille.getValue();
+				t=(int)taille.getValue()+(int)tispinn.getValue();
 				if(t<20){						
 					tailmodel.setMaximum(tp[t-2][1]);						
 					tailmodel.setMinimum(tp[t-2][0]);						
-					tailmodel.setValue((tp[t-2][0]+tp[t-2][1])/2);						tail.setValue(tailmodel.getValue());						poidsmodel.setMaximum(tp[t-2][1]);						poidsmodel.setMinimum(tp[t-2][0]);						poidsmodel.setValue((tp[t-2][0]+tp[t-2][1])/2);						poids.setValue(poidsmodel.getValue());
+					tailmodel.setValue((tp[t-2][0]+tp[t-2][1])/2);
+					tail.setValue(tailmodel.getValue());
+					poidsmodel.setMaximum(tp[t-2][3]);
+					poidsmodel.setMinimum(tp[t-2][2]);
+					poidsmodel.setValue((tp[t-2][3]+tp[t-2][2])/2);
+					poids.setValue(poidsmodel.getValue());
 				}else{
 					tailmodel.setMaximum(12500);
 					tailmodel.setMinimum(250);
@@ -249,13 +254,66 @@ public class Feuille {
 				}
 			}
 		});
+		tispinn.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if((int)tispinn.getValue()<-5)
+					tispinn.setValue(-5);
+				else if((int)tispinn.getValue()>5)
+					tispinn.setValue(5);
+				t=(int)taille.getValue()+(int)tispinn.getValue();
+				if(t<20){						
+					tailmodel.setMaximum(tp[t-2][1]);						
+					tailmodel.setMinimum(tp[t-2][0]);						
+					tailmodel.setValue((tp[t-2][0]+tp[t-2][1])/2);
+					tail.setValue(tailmodel.getValue());
+					poidsmodel.setMaximum(tp[t-2][3]);
+					poidsmodel.setMinimum(tp[t-2][2]);
+					poidsmodel.setValue((tp[t-2][3]+tp[t-2][2])/2);
+					poids.setValue(poidsmodel.getValue());
+				}else{
+					tailmodel.setMaximum(12500);
+					tailmodel.setMinimum(250);
+					tailmodel.setValue(250);
+					tail.setValue(tailmodel.getValue());
+					poidsmodel.setMaximum(1400);
+					poidsmodel.setMinimum(400);
+					poidsmodel.setValue(400);
+					poids.setValue(poidsmodel.getValue());
+				}
+			}
+		});
+		taillefemme=false;
+		tailledaimah=false;
+		femme.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(femme.isSelected() && !taillefemme){
+					taille.setValue((int)taille.getValue()-1);
+					taillefemme=true;
+				}
+			}
+		});
+		homme.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(homme.isSelected() && taillefemme){
+					taille.setValue((int)taille.getValue()+1);
+					taillefemme=false;
+				}
+			}
+		});
 		pan2.add(taille);
 		pan2.add(ti);
+		pan2.add(tispinn);
 		pan2.add(new JLabel("Taille"));
 		pan2.add(tail);
 		pan2.add(new JLabel("Poids"));
 		pan2.add(poids);
-		pan2.add(new JLabel("Apparence"));
+		pan2.add(new JLabel("App"));
 		app=new JSpinner();
 		app.setPreferredSize(new Dimension(40, 20));
 		app.setValue(5);
@@ -299,20 +357,20 @@ public class Feuille {
 		JTextField ns =new JTextField(race.getSelectedItem().equals("Tuan Dalyr")? 
 				lvl+2<=xplvl.size()-1? ""+xplvl.get(lvl+2): ""+((450*(lvl-14+2))+xplvl.get(xplvl.size()-1)):
 					lvl<=xplvl.size()-1? ""+xplvl.get(lvl): ""+((450*(lvl-14))+xplvl.get(xplvl.size()-1)));
-		niveau.addChangeListener(new ChangeListener() {					
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				ns.setText(race.getSelectedItem().equals("Tuan Dalyr")? 
-						lvl+2<=xplvl.size()-1? ""+xplvl.get(lvl+2): ""+((450*(lvl-14+2))+xplvl.get(xplvl.size()-1)):
-							lvl<=xplvl.size()-1? ""+xplvl.get(lvl): ""+((450*(lvl-14))+xplvl.get(xplvl.size()-1)));
-			}
-		});
 		race.addActionListener(new ActionListener() {					
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ns.setText(race.getSelectedItem().equals("Tuan Dalyr")? 
 						lvl+2<=xplvl.size()-1? ""+xplvl.get(lvl+2): ""+((450*(lvl-14+2))+xplvl.get(xplvl.size()-1)):
-							lvl<=xplvl.size()-1? ""+xplvl.get(lvl): ""+((450*(lvl-14))+xplvl.get(xplvl.size()-1)));			
+							lvl<=xplvl.size()-1? ""+xplvl.get(lvl): ""+((450*(lvl-14))+xplvl.get(xplvl.size()-1)));	
+
+				if(race.getSelectedIndex()==5 && !tailledaimah){
+					taille.setValue((int)taille.getValue()-1);
+					tailledaimah=true;
+				}else if(race.getSelectedIndex()!=5 && tailledaimah){
+					taille.setValue((int)taille.getValue()+1);
+					tailledaimah=false;
+				}
 			}
 		});
 		ns.setEditable(false);
@@ -327,7 +385,7 @@ public class Feuille {
 		pfrest.setText(pf.getText());
 		pfrest.setEditable(false);
 		pan3.add(pf);
-		pan3.add(new JLabel("a� Depenser"));
+		pan3.add(new JLabel("a  Depenser"));
 		pan3.add(pfrest);
 
 		description.add(pan1);
@@ -486,7 +544,7 @@ public class Feuille {
 		resisnbr.add(caracphy);
 		JTextField modphy= new JTextField();
 		modphy.setEditable(false);
-		modphy.setText(""+mod.get(caracpricipal.get(1)));
+		modphy.setText(""+mod.get(caracpricipal.get(1)-1));
 		modphy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modphy);
 		JTextField totalphy=new JTextField(""+(Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText())));
@@ -506,7 +564,7 @@ public class Feuille {
 		resisnbr.add(caracmal);
 		JTextField modmal= new JTextField();
 		modmal.setEditable(false);
-		modmal.setText(""+mod.get(caracpricipal.get(1)));
+		modmal.setText(""+mod.get(caracpricipal.get(1)-1));
 		modmal.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modmal);
 		JTextField totalmal=new JTextField(""+(Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText())));
@@ -526,7 +584,7 @@ public class Feuille {
 		resisnbr.add(caracpoi);
 		JTextField modpoi= new JTextField();
 		modpoi.setEditable(false);
-		modpoi.setText(""+mod.get(caracpricipal.get(1)));
+		modpoi.setText(""+mod.get(caracpricipal.get(1)-1));
 		modpoi.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modpoi);
 		JTextField totalpoi=new JTextField(""+(Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText())));
@@ -546,7 +604,7 @@ public class Feuille {
 		resisnbr.add(caracmys);
 		JTextField modmys= new JTextField();
 		modmys.setEditable(false);
-		modmys.setText(""+mod.get(caracpricipal.get(6)));
+		modmys.setText(""+mod.get(caracpricipal.get(6)-1));
 		modmys.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modmys);
 		JTextField totalmys=new JTextField(""+(Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())));
@@ -566,7 +624,7 @@ public class Feuille {
 		resisnbr.add(caracpsy);
 		JTextField modpsy= new JTextField();
 		modpsy.setEditable(false);
-		modpsy.setText(""+mod.get(caracpricipal.get(7)));
+		modpsy.setText(""+mod.get(caracpricipal.get(7)-1));
 		modpsy.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		resisnbr.add(modpsy);
 		JTextField totalpsy=new JTextField(""+
@@ -899,7 +957,7 @@ public class Feuille {
 						totalmys.setText(Integer.parseInt(totalmys.getText())-25+"");
 					else
 						totalmys.setText(Integer.parseInt(totalmys.getText())-50+"");
-					
+
 				}
 			}
 		});
@@ -925,7 +983,6 @@ public class Feuille {
 		avdes[1][2].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(avdes[1][2].isSelected()){
-					System.out.println(totalphy.getText());
 					totalphy.setText(Integer.parseInt(totalphy.getText())/2+"");
 				}else{
 					if(avdes[1][0].isSelected()){
@@ -990,13 +1047,49 @@ public class Feuille {
 			}
 		});
 
+		niveau.addChangeListener(new ChangeListener() {					
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				ns.setText(race.getSelectedItem().equals("Tuan Dalyr")? 
+						lvl+2<=xplvl.size()-1? ""+xplvl.get(lvl+2): ""+((450*(lvl-14+2))+xplvl.get(xplvl.size()-1)):
+							lvl<=xplvl.size()-1? ""+xplvl.get(lvl): ""+((450*(lvl-14))+xplvl.get(xplvl.size()-1)));
+
+				pres.setText(""+(25+5*(int)niveau.getValue()));
+				phy.setText(pres.getText());
+				mal.setText(pres.getText());
+				poi.setText(pres.getText());
+				mys.setText(pres.getText());
+				psy.setText(pres.getText());
+				total1.setText(pres.getText());
+				totalphy.setText((Integer.parseInt(phy.getText())+Integer.parseInt(modphy.getText())+
+						(avdes[1][0].isSelected()? 25:0) +
+						(avdes[1][1].isSelected()? 50:0)) /
+						(avdes[1][2].isSelected()? 2:1 )+"");
+				totalmal.setText((Integer.parseInt(mal.getText())+Integer.parseInt(modmal.getText())+
+						(avdes[2][0].isSelected()? 25:0) +
+						(avdes[2][1].isSelected()? 50:0)) /
+						(avdes[2][2].isSelected()? 2:1 )+"");
+				totalpoi.setText((Integer.parseInt(poi.getText())+Integer.parseInt(modpoi.getText())+
+						(avdes[3][0].isSelected()? 25:0) +
+						(avdes[3][1].isSelected()? 50:0)) /
+						(avdes[3][2].isSelected()? 2:1 )+"");
+				totalmys.setText((Integer.parseInt(mys.getText())+Integer.parseInt(modmys.getText())+
+						(avdes[4][0].isSelected()? 25:0) +
+						(avdes[4][1].isSelected()? 50:0)) /
+						(avdes[4][2].isSelected()? 2:1 )+"");
+				totalpsy.setText((Integer.parseInt(psy.getText())+Integer.parseInt(modpsy.getText())+
+						(avdes[5][0].isSelected()? 25:0) +
+						(avdes[5][1].isSelected()? 50:0)) /
+						(avdes[5][2].isSelected()? 2:1 )+"");
+			}
+		});
 
 		resistance.add(resistext);
 		resistance.add(resisnbr);
 		resistance.add(resisbutton);	
 
 
-		JPanel carac=new JPanel(new GridLayout(8, 4));
+		JPanel carac=new JPanel(new GridLayout(9, 4));
 		carac.setBorder(BorderFactory.createMatteBorder(2, 3, 3, 3, Color.BLACK));
 		ptrept=new JSpinner();
 		ptrept.setValue((int)niveau.getValue()/2);
@@ -1014,41 +1107,7 @@ public class Feuille {
 		actpan.add(actbutt);
 		carac.add(actpan);
 		carac.add(new JLabel("Mod"));
-		basebutt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(basebutt.isSelected()){
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
-						caracmod.get(i).setText(""+mod.get((int)caracpricipalbase.get(i).getValue()-1));
-					}
-				}else{
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
-						caracmod.get(i).setText(""+mod.get((int)caracpricipalact.get(i).getValue()-1));
-					}
-				}
-			}
-		});
-		actbutt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(basebutt.isSelected()){
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
-						caracmod.get(i).setText(""+mod.get((int)caracpricipalbase.get(i).getValue()-1));
-					}
-				}else{
-					for(int i=0; i<7;i++){
-						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
-						caracmod.get(i).setText(""+mod.get((int)caracpricipalact.get(i).getValue()-1));
-					}
-				}
-			}
-		});
-		for(int i=0; i<7;i++){
+		for(int i=0; i<8;i++){
 			if(i==0)carac.add(new JLabel("Agi"));
 			if(i==1)carac.add(new JLabel("Con"));
 			if(i==2)carac.add(new JLabel("Dex"));
@@ -1065,21 +1124,97 @@ public class Feuille {
 		}
 		caracmod.get(0).setBorder(BorderFactory.createMatteBorder( 1, 1, 1, 0, Color.BLACK));
 
-		general.add(description);
-		description.setBounds(0, 0, 720, 150);
-		general.add(pdv);
-		pdv.setBounds(720-3, 0, 170, 227);
-		general.add(resistance);
-		resistance.setBounds(720-3+170-3, 0, 425, 200);
-		JPanel panl3=new JPanel(new FlowLayout());
-		JLabel l3=new JLabel("Caracteristique");
+		JPanel fatigue=new JPanel();
+		fatigue.setLayout(new BoxLayout(fatigue, BoxLayout.Y_AXIS));
+		ArrayList<JPanel> panfatigue=new ArrayList<JPanel>();
+		for(int i=0;i<7;i++){
+			panfatigue.add(new JPanel(new FlowLayout()));
+			fatigue.add(panfatigue.get(i));
+		}
+		JLabel l3=new JLabel("Fatigue");
 		l3.setFont(title);
+		panfatigue.get(0).add(l3);
+		panfatigue.get(1).add(new JLabel("Base"));
+		JTextField fatbase=new JTextField();
+		fatbase.setText(caracpricipal.get(1)+"");
+		panfatigue.get(1).add(l3);	
+
+
+		basebutt.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(basebutt.isSelected()){
+					for(int i=0; i<8;i++){
+						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalbase.get(i).getValue()-1));
+						caracpricipalbase.get(i).setValue((int)caracpricipalbase.get(i).getValue()-1);
+						caracpricipalbase.get(i).setValue((int)caracpricipalbase.get(i).getValue()+1);
+					}
+				}else{
+					for(int i=0; i<8;i++){
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());;
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalact.get(i).getValue()-1));
+						caracpricipalact.get(i).setValue((int)caracpricipalact.get(i).getValue()-1);
+						caracpricipalact.get(i).setValue((int)caracpricipalact.get(i).getValue()+1);
+					}
+				}
+			}
+		});
+		actbutt.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(basebutt.isSelected()){
+					for(int i=0; i<8;i++){
+						caracpricipal.set(i,(int)caracpricipalbase.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalbase.get(i).getValue()-1));
+						caracpricipalbase.get(i).setValue((int)caracpricipalbase.get(i).getValue()-1);
+						caracpricipalbase.get(i).setValue((int)caracpricipalbase.get(i).getValue()+1);
+					}
+				}else{
+					for(int i=0; i<8;i++){
+						caracpricipal.set(i,(int)caracpricipalact.get(i).getValue());
+						caracmod.get(i).setText(""+mod.get((int)caracpricipalact.get(i).getValue()-1));
+						caracpricipalact.get(i).setValue((int)caracpricipalact.get(i).getValue()-1);
+						caracpricipalact.get(i).setValue((int)caracpricipalact.get(i).getValue()+1);
+					}
+				}
+			}
+		});
+
+		caracpricipalbase.get(0).addChangeListener(new MyChangeListenerAgilite(caracpricipalbase.get(0), basebutt, caracpricipal, mod, caracmod.get(0)));
+		caracpricipalbase.get(1).addChangeListener(new MyChangeListenerConstitution(caracpricipalbase.get(1), basebutt, caracpricipal, mod, caracmod.get(1), taille, basepv, pv, pvtotal, pvniveau, modpv, modphy, modmal, modpoi, fatbase,totalphy,totalmal,totalpoi,avdes,pres));
+		caracpricipalbase.get(2).addChangeListener(new MyChangeListenerDexterite(caracpricipalbase.get(2), basebutt, caracpricipal, mod, caracmod.get(2)));
+		caracpricipalbase.get(3).addChangeListener(new MyChangeListenerForce(caracpricipalbase.get(3), basebutt, caracpricipal, mod, caracmod.get(3), taille));
+		caracpricipalbase.get(4).addChangeListener(new MyChangeListenerIntelligence(caracpricipalbase.get(4), basebutt, caracpricipal, mod, caracmod.get(4)));
+		caracpricipalbase.get(5).addChangeListener(new MyChangeListenerPerception(caracpricipalbase.get(5), basebutt, caracpricipal, mod, caracmod.get(5)));
+		caracpricipalbase.get(6).addChangeListener(new MyChangeListenerPouvoir(caracpricipalbase.get(6), basebutt, caracpricipal, mod, caracmod.get(6), modmys,totalmys,avdes,pres));
+		caracpricipalbase.get(7).addChangeListener(new MyChangeListenerVolonte(caracpricipalbase.get(7), basebutt, caracpricipal, mod, caracmod.get(7), modpsy,totalpsy,avdes,pres));
+		caracpricipalact.get(0).addChangeListener(new MyChangeListenerAgilite(caracpricipalact.get(0), actbutt, caracpricipal, mod, caracmod.get(0)));
+		caracpricipalact.get(1).addChangeListener(new MyChangeListenerConstitution(caracpricipalact.get(1), actbutt, caracpricipal, mod, caracmod.get(1), taille, basepv, pv, pvtotal, pvniveau, modpv, modphy, modmal, modpoi, fatbase,totalphy,totalmal,totalpoi,avdes,pres));
+		caracpricipalact.get(2).addChangeListener(new MyChangeListenerDexterite(caracpricipalact.get(2), actbutt, caracpricipal, mod, caracmod.get(2)));
+		caracpricipalact.get(3).addChangeListener(new MyChangeListenerForce(caracpricipalact.get(3), actbutt, caracpricipal, mod, caracmod.get(3), taille));
+		caracpricipalact.get(4).addChangeListener(new MyChangeListenerIntelligence(caracpricipalact.get(4), actbutt, caracpricipal, mod, caracmod.get(4)));
+		caracpricipalact.get(5).addChangeListener(new MyChangeListenerPerception(caracpricipalact.get(5), actbutt, caracpricipal, mod, caracmod.get(5)));
+		caracpricipalact.get(6).addChangeListener(new MyChangeListenerPouvoir(caracpricipalact.get(6), actbutt, caracpricipal, mod, caracmod.get(6), modmys,totalmys,avdes,pres));
+		caracpricipalact.get(7).addChangeListener(new MyChangeListenerVolonte(caracpricipalact.get(7), actbutt, caracpricipal, mod, caracmod.get(7), modpsy,totalpsy,avdes,pres));
+
+		general.add(description);
+		description.setBounds(0, 0, 730, 150);
+		general.add(pdv);
+		pdv.setBounds(730-3, 0, 170, 227);
+		general.add(resistance);
+		resistance.setBounds(730-3+170-3, 0, 425, 200);
+		JPanel panl3=new JPanel(new FlowLayout());
+		JLabel labelcarac=new JLabel("Caracteristique");
+		labelcarac.setFont(title);
 		panl3.setBorder(BorderFactory.createMatteBorder(3, 3, 0, 3, Color.BLACK));
-		panl3.add(l3);
+		panl3.add(labelcarac);
 		general.add(panl3);
 		panl3.setBounds(0, 150-3, 250, 50);
 		general.add(carac);	
-		carac.setBounds(0, 150-3+50, 250, 180);
+		carac.setBounds(0, 150-3+50, 250, 190);
 	}
 
 	public void init(){
@@ -1270,17 +1405,15 @@ public class Feuille {
 		caracpricipalbase=new ArrayList<JSpinner>();
 		basebutt=new JRadioButton();
 		actbutt=new JRadioButton();
-		for(i=0; i<7;i++){
+		for(i=0; i<8;i++){
 
 			caracmod.add(new JTextField("0"));
 			caracpricipalbase.add(new JSpinner());
 			caracpricipalbase.get(i).setValue(5);
 			caracpricipal.add((int)caracpricipalbase.get(i).getValue());
-			caracpricipalbase.get(i).addChangeListener(new MyChangeListener(caracpricipalbase.get(i), basebutt, caracpricipal, mod, i,caracmod.get(i)));
 			caracpricipalact.add(new JSpinner());
 			caracpricipalact.get(i).setValue(5);
 			caracpricipal.add((int)caracpricipalact.get(i).getValue());
-			caracpricipalact.get(i).addChangeListener(new MyChangeListener(caracpricipalact.get(i), actbutt, caracpricipal, mod, i,caracmod.get(i)));
 		}	
 
 		BufferedReader costclass;
@@ -1305,20 +1438,19 @@ public class Feuille {
 
 }
 
-class MyChangeListener implements ChangeListener{
+
+class MyChangeListenerAgilite implements ChangeListener{
 
 	JSpinner carac;
 	JRadioButton butt;
-	ArrayList<Integer> caracpricipal,mod;
-	int i;
+	ArrayList<Integer> mod, caracpricipal;
 	JTextField caracmod;
 
-	public MyChangeListener(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod,int i, JTextField caracmod) {
+	public MyChangeListenerAgilite(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod, JTextField caracmod){
 		this.carac=carac;
 		this.butt=butt;
 		this.caracpricipal=caracpricipal;
 		this.mod=mod;
-		this.i=i;
 		this.caracmod=caracmod;
 	}
 
@@ -1330,9 +1462,298 @@ class MyChangeListener implements ChangeListener{
 			carac.setValue(20);
 		}
 		if(butt.isSelected()){
-			caracpricipal.set(i,(int)carac.getValue());
+			caracpricipal.set(0,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+		}
+	}
+
+}
+
+
+class MyChangeListenerConstitution implements ChangeListener{
+
+	JSpinner taille,modpv;
+	JTextField caracmod,basepv,pvtotal,pvniveau,modphy,modmal,modpoi,fatbase,totalphy,totalmal,totalpoi,pres;
+	ArrayList<Integer> pv,mod,caracpricipal;
+	JSpinner carac;
+	JRadioButton butt;
+	JRadioButton[][] avdes;
+
+	public MyChangeListenerConstitution(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod,
+			JTextField caracmod,JSpinner taille,JTextField basepv, ArrayList<Integer> pv, JTextField pvtotal, JTextField pvniveau, 
+			JSpinner modpv, JTextField modphy, JTextField modmal, JTextField modpoi, JTextField fatbase,
+			JTextField totalphy,JTextField totalmal,JTextField totalpoi,JRadioButton[][] avdes,JTextField pres){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+		this.taille=taille;
+		this.basepv=basepv;
+		this.pv=pv;
+		this.pvtotal=pvtotal;
+		this.pvniveau=pvniveau;
+		this.modpv=modpv;
+		this.mod=mod;
+		this.modphy=modphy;
+		this.modmal=modmal;
+		this.modpoi=modpoi;
+		this.fatbase=fatbase;
+		this.totalphy=totalphy;
+		this.totalmal=totalmal;
+		this.totalpoi=totalpoi;
+		this.avdes=avdes;
+		this.pres=pres;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			taille.setValue(((int)carac.getValue()-caracpricipal.get(1))+(int)taille.getValue());
+			caracpricipal.set(1,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+			basepv.setText(""+pv.get(caracpricipal.get(1)-1));
+			pvtotal.setText(""+(Integer.parseInt(basepv.getText())+Integer.parseInt(pvniveau.getText())+(int)modpv.getValue()*caracpricipal.get(1)));
+			modphy.setText(""+mod.get(caracpricipal.get(1)-1));
+			modmal.setText(""+mod.get(caracpricipal.get(1)-1));
+			modpoi.setText(""+mod.get(caracpricipal.get(1)-1));
+			fatbase.setText(carac+"");
+
+
+
+			totalphy.setText((Integer.parseInt(pres.getText())+Integer.parseInt(modphy.getText())+
+					(avdes[1][0].isSelected()? 25:0) +
+					(avdes[1][1].isSelected()? 50:0)) /
+					(avdes[1][2].isSelected()? 2:1 )+"");
+			totalmal.setText((Integer.parseInt(pres.getText())+Integer.parseInt(modmal.getText())+
+					(avdes[2][0].isSelected()? 25:0) +
+					(avdes[2][1].isSelected()? 50:0)) /
+					(avdes[2][2].isSelected()? 2:1 )+"");
+			totalpoi.setText((Integer.parseInt(pres.getText())+Integer.parseInt(modpoi.getText())+
+					(avdes[3][0].isSelected()? 25:0) +
+					(avdes[3][1].isSelected()? 50:0)) /
+					(avdes[3][2].isSelected()? 2:1 )+"");
+		}
+	}
+
+}
+
+class MyChangeListenerDexterite implements ChangeListener{
+
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> mod,caracpricipal;
+	JTextField caracmod;
+
+	public MyChangeListenerDexterite(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod, JTextField caracmod){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			caracpricipal.set(2,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+		}
+	}
+
+}
+
+class MyChangeListenerForce implements ChangeListener{
+
+	JSpinner taille;
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> mod,caracpricipal;
+	JTextField caracmod;
+
+	public MyChangeListenerForce(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod,JTextField caracmod, JSpinner taille){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+		this.taille=taille;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			taille.setValue(((int)carac.getValue()-caracpricipal.get(3))+(int)taille.getValue());
+			caracpricipal.set(3,(int)carac.getValue());
 			caracmod.setText(""+mod.get((int)carac.getValue()-1));
 		}
 
 	}
+
 }
+
+class MyChangeListenerIntelligence implements ChangeListener{
+
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> mod,caracpricipal;
+	JTextField caracmod;
+
+	public MyChangeListenerIntelligence(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod, JTextField caracmod){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			caracpricipal.set(4,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+		}
+	}
+
+}
+
+class MyChangeListenerPerception implements ChangeListener{
+
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> mod,caracpricipal;
+	JTextField caracmod;
+
+	public MyChangeListenerPerception(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod, JTextField caracmod){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			caracpricipal.set(5,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+		}
+	}
+
+}
+
+class MyChangeListenerPouvoir implements ChangeListener{
+
+	JTextField modmys,totalmys,pres;
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> mod,caracpricipal;
+	JTextField caracmod;
+	JRadioButton[][] avdes;
+
+	public MyChangeListenerPouvoir(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod,
+			JTextField caracmod, JTextField modmys,JTextField totalmys,JRadioButton[][] avdes,JTextField pres){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+		this.mod=mod;
+		this.modmys=modmys;
+		this.totalmys=totalmys;
+		this.avdes=avdes;
+		this.pres=pres;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			caracpricipal.set(6,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+			modmys.setText(""+mod.get(caracpricipal.get(6)-1));
+			
+			totalmys.setText((Integer.parseInt(pres.getText())+Integer.parseInt(modmys.getText())+
+					(avdes[1][0].isSelected()? 25:0) +
+					(avdes[1][1].isSelected()? 50:0)) /
+					(avdes[1][2].isSelected()? 2:1 )+"");
+		}
+	}
+
+}
+
+class MyChangeListenerVolonte implements ChangeListener{
+
+	JTextField modpsy,totalpsy,pres;
+	JSpinner carac;
+	JRadioButton butt;
+	ArrayList<Integer> mod,caracpricipal;
+	JTextField caracmod;
+	JRadioButton[][] avdes;
+
+	public MyChangeListenerVolonte(JSpinner carac, JRadioButton butt, ArrayList<Integer> caracpricipal, ArrayList<Integer> mod, 
+			JTextField caracmod, JTextField modpsy,JTextField totalpsy,JRadioButton[][] avdes,JTextField pres){
+		this.carac=carac;
+		this.butt=butt;
+		this.caracpricipal=caracpricipal;
+		this.mod=mod;
+		this.caracmod=caracmod;
+		this.mod=mod;
+		this.modpsy=modpsy;
+		this.totalpsy=totalpsy;
+		this.avdes=avdes;
+		this.pres=pres;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if ((int)carac.getValue()<1){
+			carac.setValue(1);
+		}else if((int) carac.getValue()>20){
+			carac.setValue(20);
+		}
+		if(butt.isSelected()){
+			caracpricipal.set(7,(int)carac.getValue());
+			caracmod.setText(""+mod.get((int)carac.getValue()-1));
+			modpsy.setText(""+mod.get(caracpricipal.get(7)-1));
+			
+			
+			totalpsy.setText((Integer.parseInt(pres.getText())+Integer.parseInt(modpsy.getText())+
+					(avdes[1][0].isSelected()? 25:0) +
+					(avdes[1][1].isSelected()? 50:0)) /
+					(avdes[1][2].isSelected()? 2:1 )+"");
+		}
+	}
+
+}
+
+
