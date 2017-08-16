@@ -1,0 +1,13 @@
+JRadioButton avunmal=new JRadioButton();
+		avunmal.setBackground(Color.GREEN);
+		JRadioButton avdeuxmal=new JRadioButton();
+		avdeuxmal.setBackground(Color.GREEN);
+		JRadioButton desavunmal=new JRadioButton();
+		desavunmal.setBackground(Color.RED);
+		JPanel pannmal=new JPanel(new FlowLayout());
+		JTextField totalmal=new JTextField(""+(
+									Integer.parseInt(mal.getText())+
+									Integer.parseInt(modmal.getText()+
+									(avunmal.isSelected()? 25:
+										(avdeuxmal.isSelected()? 50:
+											(desavunmal.isSelected()? +0/2:+0))))));

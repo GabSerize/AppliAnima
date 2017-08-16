@@ -1,0 +1,12 @@
+15;15;5;25;3;60;2;2;2;2;2;20;50;3;70;3;3;3;3;3;50;20;3;2;2;2;3;2;2;2;/;Prouesse de force=1;/;Attaque=5;Parade=5;Port d'armure=5;Prouesse de force=5;/;
+20;10;10;25;3;60;2;3;2;2;2;20;50;3;70;3;3;3;3;3;50;20;3;2;2;2;3;2;2;2;/;/;Attaque=5;Esquive=5;Acrobaties=10;Saut=10;Athlétisme=10;Habilité Manuelle=10;Style=10;/;
+15;15;5;20;3;60;2;2;2;2;2;20;50;2;60;3;3;3;3;1;50;20;3;2;1;2;2;2;3;2;/;Résistance à la Douleur=1;/;Parade=5;Port d'armure=10;Révoquer=10;Zéon=20;Commandement=10;Resistance à la Douleur=10;Style=5;/;Echange bonus révoquer et zéon contre +10 impassibilité;
+15;15;5;20;3;60;2;2;2;2;2;20;50;2;60;3;3;1;3;3;50;20;3;2;1;2;2;2;2;2;/;Impassibilité=1;/;Attaque=5;Port d'armure=5;Dominer=10;Zéon=20;Intimidation=10;Impassibilité=10;Style=5;Persuassion=5;/;Echange bonus dominer et zéon contre +10 résistance douleur;
+10;20;5;10;3;60;2;2;2;1;3;30;50;3;70;3;3;3;3;3;50;20;3;2;2;2;3;1;3;2;/;/;Attaque=5;Parade=5;Port d'armure=10;Prouesse de force=5;/;Module d'arme moitié prix;
+20;5;5;50;3;60;2;2;2;2;1;10;50;3;70;3;3;3;3;3;50;20;3;2;2;2;3;2;2;2;/;/;Attaque=5;/;
+20;10;5;30;3;60;2;2;2;2;2;15;50;3;70;3;3;3;3;3;50;20;3;2;2;2;3;2;2;2;/;/;Style=5;/;Arme Martiaux coute 20PF et 10 pour le 1er;
+20;10;5;20;3;60;2;2;2;2;2;25;50;3;70;3;3;3;3;3;50;20;3;2;2;1;3;3;2;2;/;Piéges=1;Herboristerie=2;Animaux=1;Mèdcine=2;/;Attaque=5;Vigilance=10;Observation=10;Pistage=10;Piéges=5;Animaux=5;Herboristerie=5;/;Détection du Ki=10;
+20;5;10;25;3;60;2;3;2;2;2;20;50;3;70;3;3;3;3;3;50;20;3;2;2;2;3;2;2;2;/;/;Attaque=5;Esquive=5;Vigilance=10;Observation=10;Camouflage=10;Discrétion=10;/;Dissimulation du Ki=5;
+20;5;10;20;3;50;2;3;2;3;2;25;50;3;70;3;3;3;3;3;50;20;3;1;2;2;3;3;1;2;/;Estimation=1;/;Esquive=5;Vigilance=5;Observation=5;Camouflage=5;Discrétion=5;Piéges=5;Habilité Manuelle=5;Lacin=10;/;Dissimulation du Ki=5;
+20;5;10;20;3;50;2;3;2;3;2;25;50;3;70;3;3;3;3;3;50;20;3;2;2;1;3;3;2;2;/;Discrétion=1;Impassiblité=2;Mémorisation=2;/;Attaque=5;Vigilance=10;Observation=10;Camouflage=10;Discrétion=10;Piéges=10;Impassibilité=10;Poisson=10;/;
+Sorcier
